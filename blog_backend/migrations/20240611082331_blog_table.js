@@ -6,10 +6,9 @@ exports.up = function(knex) {
     return knex.schema
         .createTable('Blogs', function(table) {
             table.increments('id').primary();
-            table.integer('author_id').unsigned().references('id').inTable('Users');
+            table.integer('author_id').unsigned().notNullable().references('id').inTable('Users').onDelete("CASCADE");
             table.string('title', 50).notNullable();
-            table.string('text').notNullable();
-            table.boolean('published').defaultTo(false);
+            table.boolean('published').defaultTo(false).notNullable();
         });
 };
 

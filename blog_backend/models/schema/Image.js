@@ -7,25 +7,25 @@ class Image extends Model {
 
     static get jsonSchema() {
         return {
-            required: ['image', 'blog_id'],
+            required: ['image', 'page_id'],
             properties: {
                 id : { type : 'integer' },
                 // image : { type : 'binary' } but there is no binary enforcement
-                blog_id : { type : 'integer' }
+                page_id : { type : 'integer' }
             }
         };
     }
 
     static get relationMappings() {
-        const Blog = require('./Blog.js');
+        const Page = require('../Page.js');
 
         return {
-            blog : {
+            page : {
                 relation : Model.BelongsToOneRelation,
-                modelClass : Blog,
+                modelClass : Page,
                 join : {
-                    from : "Images.blog_id",
-                    to : "Blogs.id"
+                    from : "Images.page_id",
+                    to : "Pages.id"
                 }
             }
         };

@@ -12,7 +12,6 @@ class Blog extends Model {
                 id : { type : 'integer' },
                 author_id : { type : 'integer' },
                 title : { type : 'string', minLength: 5, maxLength: 100 },
-                text : { type : 'string', minLength: 0 },
                 published : { type : 'boolean' }
             }
         };
@@ -20,7 +19,7 @@ class Blog extends Model {
 
     static get relationMappings() {
         const User = require('./User.js');
-        const Image = require('./Image.js');
+        const Page = require('../Page.js');
 
         return {
             author : {
@@ -32,12 +31,12 @@ class Blog extends Model {
                 }
             },
 
-            images : {
+            pages : {
                 relation : Model.HasManyRelation,
-                modelClass : Image,
+                modelClass : Page,
                 join : {
                     from : "Blogs.id",
-                    to : "Images.blog_id"
+                    to : "Pages.blog_id"
                 }
             }
         };

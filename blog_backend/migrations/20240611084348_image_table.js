@@ -7,7 +7,7 @@ exports.up = function(knex) {
         .createTable('Images', function(table) {
             table.increments('id').primary();
             table.binary('image').notNullable();
-            table.integer('blog_id').unsigned().references('id').inTable('Blogs').onDelete('CASCADE');
+            table.integer('page_id').unsigned().notNullable().references('id').inTable('Pages').onDelete("CASCADE");
         });
 };
 
@@ -16,6 +16,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema
-    .dropTable('Images');
+    return knex.schema.dropTable('Images');
 };
