@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const userHandler = require('../handlers/userHandler.js');
 
 // account sign up
 router.post(/\/accounts\/signup\/?$/, (req, res) => {
 });
   
 // account login
-router.post(/\/accounts\/login\/?$/, (req, res) => {
+router.get(/\/accounts\/login\/?$/, async (req, res) => {
 });
   
 // get the user profile

@@ -14,7 +14,7 @@ module.exports = {
       database: 'blog_db'
     },
     migrations: {
-      directory: './migrations'
+      directory: './models/migrations'
     }
   }
 
