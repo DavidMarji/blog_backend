@@ -7,7 +7,7 @@ exports.up = function(knex) {
         .createTable('Blogs', function(table) {
             table.increments('id').primary();
             table.integer('author_id').unsigned().notNullable().references('id').inTable('Users').onDelete("CASCADE");
-            table.string('title', 50).notNullable();
+            table.string('title', 50).unique().notNullable();
             table.boolean('published').defaultTo(false).notNullable();
         });
 };

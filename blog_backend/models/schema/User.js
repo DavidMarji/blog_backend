@@ -7,6 +7,7 @@ class User extends Model {
 
     static get jsonSchema() {
         return {
+            type : 'object',
             required: ['username', 'email', 'password'],
             properties: {
                 id : { type : 'integer' },
@@ -29,7 +30,31 @@ class User extends Model {
                     from : 'Users.id',
                     to : "Blogs.author_id"
                 }
-            }
+            },
+            unpublishedBlogs : {
+                relation : Model.HasManyRelation,
+                modelClass : Blog,
+
+                join : {
+                    from : 'Users.id',
+                    to : "Blogs.author_id"
+                },
+                modify: builder => {
+                    builder.where('published', false);
+                }
+            },
+            publishedBlogs : {
+                relation : Model.HasManyRelation,
+                modelClass : Blog,
+
+                join : {
+                    from : 'Users.id',
+                    to : "Blogs.author_id"
+                },
+                modify: builder => {
+                    builder.where('published', true);
+                }
+            },
         };
     }
 }
