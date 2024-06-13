@@ -43,6 +43,29 @@ class Page extends Model {
             }
         };
     }
+
+    static async createPage(blogId, pageNumber) {
+        return await Page.query()
+            .insert({
+                blog_id : blogId,
+                page_content : "",
+                page_number : pageNumber,
+            });
+    }
+
+    async updatePage(newPageContent) {
+        return await this.$query().patch({
+            page_content : newPageContent
+        });
+    }
+
+    async deleteThisPage() {
+        return await this.$query().delete();
+    }
+
+    async getPageImages() {
+        return await this.$relatedQuery('images');
+    }
 }
 
 module.exports = Page;

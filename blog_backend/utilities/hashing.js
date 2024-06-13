@@ -6,4 +6,11 @@ function hashText(text) {
 	return hash.digest('hex');
 }
 
-module.exports = { hashText };
+function generateUUID(text) {
+	return crypto.generateUUID(text);
+}
+
+module.exports = {
+	hashText, 
+	generateUUID
+};

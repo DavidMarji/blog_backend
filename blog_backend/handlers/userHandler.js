@@ -4,23 +4,15 @@ const jwt = require('../utilities/jwt.js');
 const User = require('../models/schema/User.js');
 
 const findOneUser = async function findOneUser(username) {
-    try {
-        let user = await User.query()
-            .findOne({ username : username });
+    
+    let user = await User.findOneUserByUsername(username);
 
-        if(!user) 
-            user = await User.query()
-                .findOne({email : username})
-                .throwIfNotFound({message : 404});
-
-        return user;
-    }
-    catch (error) {
-        if(error.message === '404') throw new Error(404);
-             
-        console.log(error.message);
-        throw new Error(520);
-    }
+    if(!user) 
+        user = await User.findOneUserByEmail(username);
+    
+    if(!user) throw new Error(404);
+    return user;
+    // throws 404
 }
 
 const signUp = async function signUp(username, email, password){
@@ -33,11 +25,7 @@ const signUp = async function signUp(username, email, password){
     try {
         // since the model has the unique keyword there is no need to check for this as it would throw an error
 
-        const user = await User.query().insert({
-            username : username,
-            email : email,
-            password : password
-        });
+        const user = await User.createUser(username, email, password);
         
         const generatedToken = jwt.generateAccessToken(username, user.id);
         return generatedToken; 
@@ -46,6 +34,7 @@ const signUp = async function signUp(username, email, password){
         console.log(error.message);
         throw new Error(409);
     }
+    // throws 409
 }
 
 const login = async function login(username, password){
@@ -55,20 +44,12 @@ const login = async function login(username, password){
     const val = userInfoVerification.validateUserLogin(username, password);
     if(val !== 200) throw new Error(401);
 
-    try {
-        let user = await findOneUser(username);
-        if(user.password !== password) throw new Error(401);
+    let user = await findOneUser(username);
+    if(user.password !== password) throw new Error(401);
 
-        const generatedToken = jwt.generateAccessToken(username, user.id);
-        return generatedToken;
-    }
-    catch (error) {
-        if(error.message === '401'
-            || error.message === '404') throw new Error(error.message);
-
-        console.log(error.message);
-        throw new Error(520);
-    }
+    const generatedToken = jwt.generateAccessToken(username, user.id);
+    return generatedToken;
+    // throws 401 and 404
 }
 
 // get the access token to ensure that nobody other than the user themself wants to delete their account
@@ -78,21 +59,12 @@ const deleteUser = async function deleteUser(username, accessToken) {
     const verified = jwt.verifyAccessToken(accessToken);
     if(!verified.success) throw new Error(401);
     
-    try {
-        let user = await findOneUser(username);
-        if(user.username === verified.data.username) {
-            // return number of rows deleted
-            return await User
-                .delete()
-                .where('username', user.username);
-        }
+    let user = await findOneUser(username);
+    if(user.username === verified.data.username) {
+        // return number of rows deleted
+        return await User.deleteUser(user.username);
     }
-    catch (error) {
-        if(error.message === '404') throw new Error(error.message);
-
-        console.log(error.message);
-        throw new Error(520);
-    }
+    // throws 404
 }
 
 module.exports = {signUp, login, findOneUser, deleteUser};

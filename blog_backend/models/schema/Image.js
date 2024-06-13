@@ -11,7 +11,8 @@ class Image extends Model {
             required: ['image', 'page_id'],
             properties: {
                 id : { type : 'integer' },
-                // image : { type : 'binary' } but there is no binary enforcement
+                // no type enforcement for binary so just leave it like this
+                image : {},
                 page_id : { type : 'integer' }
             }
         };
@@ -30,6 +31,14 @@ class Image extends Model {
                 }
             }
         };
+    }
+
+    static async createImage(image, pageId) {
+        return await Image.query()
+            .insert({
+                image : image,
+                page_id : pageId
+            });
     }
 }
 

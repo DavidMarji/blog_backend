@@ -10,7 +10,7 @@ router.post('/blogs/:id/pages/:number/images/' , (req, res) => {
 });
 
 // delete an image after a user wanted to delete it
-router.delete('/blogs/:id/pages/:number/images/' , (req, res) => {
+router.delete('/blogs/:id/pages/:number/images/:imageId' , (req, res) => {
 });
 
 module.exports = router;

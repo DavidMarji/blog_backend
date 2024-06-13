@@ -57,6 +57,51 @@ class User extends Model {
             },
         };
     }
+
+    static async getAllUserBlogs(userId) {
+        return await User.query()
+            .findById(userId)
+            .withGraphFetched('blogs')
+            .throwIfNotFound({ message : 404 });
+    }
+
+    static async getAllUnpublishedUserBlogs(userId) {
+        return await User.query()
+            .findById(userId)
+            .withGraphFetched('unpublishedBlogs')
+            .throwIfNotFound({ message : 404 });
+    }
+
+    static async getAllPublishedUserBlogs(userId) {
+        await User.query()
+            .findById(userId)
+            .withGraphFetched('publishedBlogs')
+            .throwIfNotFound({ message : 404 });
+    }
+
+    static async findOneUserByUsername(username) {
+        return await User.query()
+            .findOne({ username : username });
+    }
+
+    static async findOneUserByEmail(email) {
+        return await User.query()
+            .findOne({email : email});
+    }
+
+    static async createUser(username, email, password) {
+        return await User.query().insert({
+            username : username,
+            email : email,
+            password : password
+        });
+    }
+
+    static async deleteUser(username) {
+        return await User
+            .delete()
+            .where('username', username);
+    }
 }
 
 module.exports = User;
