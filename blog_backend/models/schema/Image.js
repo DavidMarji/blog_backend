@@ -7,6 +7,7 @@ class Image extends Model {
 
     static get jsonSchema() {
         return {
+            type : 'object',
             required: ['image', 'page_id'],
             properties: {
                 id : { type : 'integer' },

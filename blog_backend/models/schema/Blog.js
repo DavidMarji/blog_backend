@@ -7,6 +7,7 @@ class Blog extends Model {
 
     static get jsonSchema() {
         return {
+            type : 'object',
             required: ['author_id', 'title'],
             properties: {
                 id : { type : 'integer' },

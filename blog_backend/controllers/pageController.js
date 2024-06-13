@@ -6,7 +6,7 @@ router.get('/blogs/:id/pages/:number/', (req, res) => {
 });
 
 // create a new page
-router.post('/blogs/:id/pages/:number/', (req, res) => {
+router.post('/blogs/:id/pages/', (req, res) => {
 });
 
 // update a page

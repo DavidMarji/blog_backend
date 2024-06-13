@@ -5,7 +5,9 @@ const User = require('../models/schema/User.js');
 
 const findOneUser = async function findOneUser(username) {
     try {
-        let user = await User.query().findOne({ username : username });
+        let user = await User.query()
+            .findOne({ username : username });
+
         if(!user) 
             user = await User.query()
                 .findOne({email : username})
@@ -86,8 +88,7 @@ const deleteUser = async function deleteUser(username, accessToken) {
         }
     }
     catch (error) {
-        if( error.message === '401'
-            || error.message === '404') throw new Error(error.message);
+        if(error.message === '404') throw new Error(error.message);
 
         console.log(error.message);
         throw new Error(520);
