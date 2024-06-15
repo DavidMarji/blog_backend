@@ -11,8 +11,7 @@ class Image extends Model {
             required: ['image', 'page_id'],
             properties: {
                 id : { type : 'integer' },
-                // no type enforcement for binary so just leave it like this
-                image : {},
+                image : { type : 'string', },
                 page_id : { type : 'integer' }
             }
         };

@@ -5,6 +5,7 @@ const userController = require('./controllers/userController.js');
 const pageController = require('./controllers/pageController.js');
 const blogController = require('./controllers/blogController.js');
 const imageController = require('./controllers/imageController.js');
+const jwt = require('./utilities/jwt.js');
 require('./models/knex.js');
 
 app.listen(3000, () => console.log('Listening on 3000'));
@@ -18,6 +19,21 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use('/static', express.static('public'))
+app.use((req, res, next) => {
+    const verified = jwt.verifyAccessToken(req.headers.authentication);
+    if(req.path !== '/accounts/login/'
+        && req.path !== '/accounts/signup/'){
+        
+        if(!verified.success){
+            res.sendStatus(401);
+            return;
+        }
+    }
+    
+    req.username = verified.data.username;
+    req.userId = verified.data.id;
+    next();
+});
 
 app.use(userController);
 app.use(blogController);

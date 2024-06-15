@@ -3,11 +3,7 @@ const Blog = require('../models/schema/Blog.js');
 const User = require('../models/schema/User.js');
 
 // get all published blogs (accessable to any logged in user)
-const getAllPublishedBlogs = async function getAllPublishedBlogs(accessToken) {
-    
-    const verified  = jwt.verifyAccessToken(accessToken);
-    // unauthorized
-    if(!verified.success) throw new Error(401);
+const getAllPublishedBlogs = async function getAllPublishedBlogs() {
 
     // find all blogs that are published
     const blogs = await Blog.getAllPublishedBlogs();
@@ -15,45 +11,33 @@ const getAllPublishedBlogs = async function getAllPublishedBlogs(accessToken) {
     // if no blogs exist that is fine just return undefined and handle later
     return blogs;
 
-    // only throws 401
 }
 
 // get on blog by its title
-const getOneBlogByTitle = async function getOneBlogByTitle(title, accessToken) {
-    
-    const verified = jwt.verifyAccessToken(accessToken);
-    // unauthorized
-    if(!verified.success) throw new Error(401);
+const getOneBlogByTitle = async function getOneBlogByTitle(title, userId) {
 
     const blog = await Blog.getOneBlogByTitle(title);
 
     // user tries to access an unpublished blog that they didn't create
-    if(!blog.published && blog.author_id !== verified.data.id) throw new Error(401);
+    if(!blog.published && blog.author_id !== userId) throw new Error(401);
 
     return blog;
     
     //throws 401 and 404
 }
 
-const getAllUserBlogs = async function getAllUserBlogs(accessToken) {
+const getAllUserBlogs = async function getAllUserBlogs(userId) {
 
-    const verified = jwt.verifyAccessToken(accessToken);
-    // unauthorized
-    if(!verified.success) throw new Error(401);
-
-    const userWithBlogs = await User.getAllUserBlogs(verified.data.id);
+    const userWithBlogs = await User.getAllUserBlogs(userId);
 
     // user has no blogs which is fine 
     return userWithBlogs ? userWithBlogs.blogs : [];
-    // throws 401 and 404
+    // throws 404
 }
 
-const getAllUnpublishedUserBlogs = async function getAllUnpublishedUserBlogs(accessToken) {
+const getAllUnpublishedUserBlogs = async function getAllUnpublishedUserBlogs(userId) {
     
-    const verified = jwt.verifyAccessToken(accessToken);
-    // unauthorized
-    if(!verified.success) throw new Error(401);
-    const userWithBlogs = await User.getAllUnpublishedUserBlogs(verified.data.id);
+    const userWithBlogs = await User.getAllUnpublishedUserBlogs(userId);
 
     // user has no unpublished blogs which is fine
     return userWithBlogs ? userWithBlogs.unpublishedBlogs : [];
@@ -61,52 +45,39 @@ const getAllUnpublishedUserBlogs = async function getAllUnpublishedUserBlogs(acc
     // throws 401 and 404
 }
 
-const getAllPublishedUserBlogs = async function getAllPublishedUserBlogs(accessToken) {
-    
-    const verified = jwt.verifyAccessToken(accessToken);
-    // unauthorized
-    if(!verified.success) throw new Error(401);
+const getAllPublishedUserBlogs = async function getAllPublishedUserBlogs(userId) {
 
-    const userWithBlogs = await User.getAllPublishedUserBlogs(verified.data.id);
+    const userWithBlogs = await User.getAllPublishedUserBlogs(userId);
 
     // user has no published blogs which is fine
     return userWithBlogs ? userWithBlogs.publishedBlogs : [];
     // throws 401 and 404
 }
 
-const updateBlogTitle = async function updateBlogTitle(id, newTitle, accessToken) {
-    const verified = jwt.verifyAccessToken(accessToken);
-    // unauthorized
-    if(!verified.success) throw new Error(401);
+const updateBlogTitle = async function updateBlogTitle(id, newTitle, userId) {
 
-    const blog = await getOneBlogById(id, accessToken);
+    const blog = await getOneBlogById(id, userId);
     // another user tries to update a blog that they didn't create
-    if(blog.author_id !== verified.data.id) throw new Error(401);
+    if(blog.author_id !== userId) throw new Error(401);
 
     return await Blog.updateBlogTitle(id, newTitle);
     // throws 401 and 404
 }
 
-const getOneBlogById = async function getOneBlogById(id, accessToken) {
-    const verified = jwt.verifyAccessToken(accessToken);
-    // unauthorized
-    if(!verified.success) throw new Error(401);
+const getOneBlogById = async function getOneBlogById(id, userId) {
     
     const blog = await Blog.getOneBlogById(id);
     
     // user tries to access unpublished blog that they didn't create
-    if(!blog.published && blog.author_id !== verified.data.id) throw new Error(401);
+    if(!blog.published && blog.author_id !== userId) throw new Error(401);
     return blog;
     // throws 401 and 404
 }
 
-const createBlog = async function createBlog(title, accessToken) {
-    const verified = jwt.verifyAccessToken(accessToken);
-    // unauthorized
-    if(!verified.success) throw new Error(401);
+const createBlog = async function createBlog(title, userId) {
     
     try {
-        return await Blog.createBlog(title, verified.data.id);
+        return await Blog.createBlog(title, userId);
     }
     catch (error) {
         console.log(error.message);
@@ -117,42 +88,34 @@ const createBlog = async function createBlog(title, accessToken) {
     // throws 401 and 409
 }
 
-const publishBlog = async function publishBlog(id, accessToken) {
-    const verified = jwt.verifyAccessToken(accessToken);
-    // unauthorized
-    if(!verified.success) throw new Error(401);
+const publishBlog = async function publishBlog(id, userId) {
 
-    const blog = await getOneBlogById(id, accessToken);
+    const blog = await getOneBlogById(id, userId);
     
     if(blog.published) throw new Error(409);
-    if(blog.author_id !== verified.data.id) throw new Error(401);
+    if(blog.author_id !== userId) throw new Error(401);
     
     return await Blog.publishBlog(id);
     // throws 401 409 and 404
 }   
 
-const unpublishBlog = async function unpublishBlog(id, accessToken) {
-    const verified = jwt.verifyAccessToken(accessToken);
-    // unauthorized
-    if(!verified.success) throw new Error(401);
+const unpublishBlog = async function unpublishBlog(id, userId) {
 
-    const blog = await getOneBlogById(id, accessToken);
+    const blog = await getOneBlogById(id, userId);
     
     if(!blog.published) throw new Error(409);
-    if(blog.author_id !== verified.data.id) throw new Error(401);
+    if(blog.author_id !== userId) throw new Error(401);
     
     return await Blog.unpublishBlog(id);
     
     // throws 401 404 and 409
 }
 
-const deleteBlog = async function deleteBlog(id, accessToken) {
-    const verified = jwt.verifyAccessToken(accessToken);
-    // unauthorized
-    if(!verified.success) throw new Error(401);
-    const blog = await getOneBlogById(id, accessToken);
+const deleteBlog = async function deleteBlog(id, userId) {
+
+    const blog = await getOneBlogById(id, userId);
     
-    if(blog.author_id === verified.data.id) throw new Error(401);
+    if(blog.author_id === userId) throw new Error(401);
 
     // return number of rows deleted
     return await Blog.deleteBlog(id);

@@ -6,7 +6,7 @@ exports.up = function(knex) {
     return knex.schema
         .createTable('Images', function(table) {
             table.increments('id').primary();
-            table.binary('image').notNullable();
+            table.string('imagePath').notNullable();
             table.integer('page_id').unsigned().notNullable().references('id').inTable('Pages').onDelete("CASCADE");
         });
 };
