@@ -60,7 +60,8 @@ class Page extends Model {
     }
 
     async deleteThisPage() {
-        return await this.$query().delete();
+        return await this.$query()
+            .delete();
     }
 
     async getPageImages() {

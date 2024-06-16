@@ -72,9 +72,11 @@ class User extends Model {
             .throwIfNotFound({ message : 404 });
     }
 
-    static async getAllPublishedUserBlogs(userId) {
+    static async getAllPublishedUserBlogs(username) {
         await User.query()
-            .findById(userId)
+            .findOne({
+                username : username
+            })
             .withGraphFetched('publishedBlogs')
             .throwIfNotFound({ message : 404 });
     }
@@ -97,10 +99,9 @@ class User extends Model {
         });
     }
 
-    static async deleteUser(username) {
-        return await User
-            .delete()
-            .where('username', username);
+    async deleteUser() {
+        return await this.$query()
+            .delete();
     }
 }
 

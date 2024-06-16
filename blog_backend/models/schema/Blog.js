@@ -94,9 +94,9 @@ class Blog extends Model {
             });
     }
 
-    static async deleteBlog(id) {
-        return await Blog.query()
-            .deleteById(id)
+    async deleteBlog() {
+        return await this.$query()
+            .delete();
     }
 
     async getPageFromBlog(pageNumber) {

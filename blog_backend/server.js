@@ -17,8 +17,6 @@ app.use('*', (req, res, next) => {
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static('public'));
-app.use('/static', express.static('public'))
 app.use((req, res, next) => {
     const verified = jwt.verifyAccessToken(req.headers.authentication);
     if(req.path !== '/accounts/login/'
@@ -28,10 +26,9 @@ app.use((req, res, next) => {
             res.sendStatus(401);
             return;
         }
+        req.sessionUsername = verified.data.username;
+        req.sessionUserId = verified.data.id;
     }
-    
-    req.username = verified.data.username;
-    req.userId = verified.data.id;
     next();
 });
 

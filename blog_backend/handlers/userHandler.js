@@ -62,7 +62,7 @@ const deleteUser = async function deleteUser(username, userId) {
     let user = await findOneUser(username);
     if(user.id === userId) {
         // return number of rows deleted
-        return await User.deleteUser(user.username);
+        return await user.deleteUser();
     }
     // throws 404
 }

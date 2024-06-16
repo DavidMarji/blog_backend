@@ -45,9 +45,9 @@ const getAllUnpublishedUserBlogs = async function getAllUnpublishedUserBlogs(use
     // throws 401 and 404
 }
 
-const getAllPublishedUserBlogs = async function getAllPublishedUserBlogs(userId) {
+const getAllPublishedUserBlogs = async function getAllPublishedUserBlogs(username) {
 
-    const userWithBlogs = await User.getAllPublishedUserBlogs(userId);
+    const userWithBlogs = await User.getAllPublishedUserBlogs(username);
 
     // user has no published blogs which is fine
     return userWithBlogs ? userWithBlogs.publishedBlogs : [];
@@ -115,10 +115,10 @@ const deleteBlog = async function deleteBlog(id, userId) {
 
     const blog = await getOneBlogById(id, userId);
     
-    if(blog.author_id === userId) throw new Error(401);
+    if(blog.author_id !== userId) throw new Error(401);
 
     // return number of rows deleted
-    return await Blog.deleteBlog(id);
+    return await blog.deleteBlog(id);
     // throws 404 and 401
 }
 
