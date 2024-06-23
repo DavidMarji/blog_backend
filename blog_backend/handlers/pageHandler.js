@@ -44,6 +44,12 @@ const deletePage = async function deletePage(blogId, pageNumber, userId){
     if(blog.author_id !== userId) throw new Error(401);
 
     const page = await getPageFromBlog(blogId, pageNumber, userId);
+    const images = await page.getPageImages();
+
+    for(let image of images) {
+        await image.deleteImage();
+    }
+
     return await page.deleteThisPage();  
 
     // throws 404, 400 (if page number < 1), and 401

@@ -51,7 +51,7 @@ class Blog extends Model {
     static async getOneBlogByTitle(title) {
         return await Blog.query()
             .findOne({title : title})
-            .throwIfNotFound({message : 404});
+            .throwIfNotFound({ message : 404 });
     }
 
     static async updateBlogTitle(id, newTitle) {
@@ -66,7 +66,7 @@ class Blog extends Model {
         return await Blog.query()
         .findById(id)
         // invalid id
-        .throwIfNotFound({message : 404});
+        .throwIfNotFound({ message : 404 });
     }
 
     static async createBlog(title, author_id) {

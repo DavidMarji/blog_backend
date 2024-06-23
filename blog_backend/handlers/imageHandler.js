@@ -9,18 +9,21 @@ const getPageImages = async function getPageImages(blogId, pageNumber, userId) {
     // throws 404, 400 (if page number < 1), and 401
 }
 
-const saveImage = async function saveImage(blogId, pageNumber, image, userId) {
+const saveImage = async function saveImage(blogId, pageNumber, imagePath, userId) {
     
     // verified page is real and got it for its id
     const page = await getOnePage(blogId, pageNumber, userId);
-    return await Image.createImage(image, page.id);
+    return await Image.createImage(imagePath, page.id);
     // throws 404, 400 (if page number < 1), and 401
 }
 
-const deleteImage = async function deleteImage(blogId, pageNumber, image, userId) {
+const deleteImage = async function deleteImage(blogId, pageNumber, imageId, userId) {
     // verified page is real and got it for its id
     const page = await getOnePage(blogId, pageNumber, userId);
-    return await Image.deleteImage(image, page.id);
+    // verified image exists
+    const image = await Image.getImage(imageId);
+    // delete and return num rows deleted
+    return await image.deleteImage();
 }
 
 module.exports = {

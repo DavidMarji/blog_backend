@@ -17,6 +17,11 @@ app.use('*', (req, res, next) => {
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.get('/favico.ico', (req, res) => {
+    res.sendStatus(200);
+});
+
 app.use((req, res, next) => {
     const verified = jwt.verifyAccessToken(req.headers.authentication);
     if(req.path !== '/accounts/login/'

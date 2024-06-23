@@ -144,7 +144,7 @@ router.get('/accounts/current/blogs/unpublished/all', (req, res) => {
             console.log(error.message);
             res.sendStatus(520);
         }
-    })
+    });
 });
 
 // get all of a user's published blogs (view user profile)

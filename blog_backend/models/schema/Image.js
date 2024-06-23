@@ -1,4 +1,5 @@
 const { Model } = require('objection');
+const fs = require('fs');
 
 class Image extends Model {
     static get tableName() {
@@ -8,10 +9,10 @@ class Image extends Model {
     static get jsonSchema() {
         return {
             type : 'object',
-            required: ['image', 'page_id'],
+            required: ['imagePath', 'page_id'],
             properties: {
                 id : { type : 'integer' },
-                image : { type : 'string', },
+                imagePath : { type : 'string', },
                 page_id : { type : 'integer' }
             }
         };
@@ -32,12 +33,28 @@ class Image extends Model {
         };
     }
 
-    static async createImage(image, pageId) {
+    static async createImage(imagePath, pageId) {
         return await Image.query()
             .insert({
-                image : image,
+                imagePath : imagePath,
                 page_id : pageId
             });
+    }
+
+    async deleteImage() {
+        const fs = require('fs');
+        fs.unlink(this.imagePath, (err) => {
+            throw err;
+        });
+
+        return await this.$query()
+            .delete();
+    }
+
+    static async getImage(imageId) {
+        return await Image.query()
+            .findById(imageId)
+            .throwIfNotFound({ message : 404 });
     }
 }
 
