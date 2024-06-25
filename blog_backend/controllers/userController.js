@@ -38,7 +38,7 @@ router.post('/accounts/login/', (req, res) => {
   
 // get the user profile
 router.get('/accounts/:username/', (req, res) => {
-    userHandler.findOneUser(req.body.username)
+    userHandler.findOneUser(req.params.username)
     .then(user => {
         res.status(200).json(user);
     })
@@ -55,7 +55,7 @@ router.get('/accounts/:username/', (req, res) => {
 
 // delete an account
 router.delete('/accouts/:username/', (req, res) => {
-    userHandler.deleteUser(req.body.username, req.sessionUserId)
+    userHandler.deleteUser(req.params.username, req.sessionUserId)
     .then(data => {
         console.log(data);
         res.sendStatus(200);
