@@ -44,6 +44,10 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get('/authenticate', (req, res) => {
+    res.sendStatus(200);
+})
+
 app.use(userController);
 app.use(blogController);
 app.use(pageController);
