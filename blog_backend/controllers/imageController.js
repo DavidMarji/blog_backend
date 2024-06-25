@@ -17,13 +17,15 @@ const imageHandler = require('../handlers/imageHandler.js');
 
 // save an image after a user uploads it
 router.post('/blogs/:id/pages/:number/images/', upload.single('image'), (req, res) => {
+    console.log('inside /blogs/:id/pages/:number/images/');
     imageHandler.saveImage(req.params.id, req.params.number, req.file.path, req.sessionUserId)
     .then(image => {
         res.status(200).json(image);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -34,14 +36,16 @@ router.post('/blogs/:id/pages/:number/images/', upload.single('image'), (req, re
 
 // delete an image after a user wanted to delete it
 router.delete('/blogs/:id/pages/:number/images/:imageId', (req, res) => {
+    console.log('inside /blogs/:id/pages/:number/images/');
     imageHandler.deleteImage(req.params.id, req.params.number, req.params.imageId, req.sessionUserId)
     .then(data => {
         console.log(data);
         res.status(200).json(data);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -57,8 +61,9 @@ router.use('/blogs/:id/pages/:number/images/', async (req, res, next) => {
         next();
     }
     catch (error) {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -69,24 +74,30 @@ router.use('/blogs/:id/pages/:number/images/', async (req, res, next) => {
 
 // get page images
 router.get('/blogs/:id/pages/:number/images/', (req, res) => {
-    const images = req.images;
-    if(!images || images.length === 0){
-        res.sendStatus(404);
-        return;
-    } 
-    const archive = archiver('zip', {zlib: {level: 9}});
-    res.attachment('images.zip');
-    archive.on('error', (err) => {
-        res.status(500).send({ error: err.message });
-    });
-    archive.pipe(res);
-
-    for(const image of images) {
-        const imagePath = path.resolve(__dirname, image.path);
-        const fileName = path.basename(imagePath);
-        archive.file(imagePath, { name: fileName });
-    };
-    archive.finalize();
+    try {
+        const images = req.images;
+        if(!images || images.length === 0){
+            res.sendStatus(404);
+            return;
+        } 
+        const archive = archiver('zip', {zlib: {level: 9}});
+        res.attachment('images.zip');
+        archive.on('error', (err) => {
+            res.status(500).send({ error: err.message });
+        });
+        archive.pipe(res);
+    
+        for(const image of images) {
+            const imagePath = path.resolve(__dirname, image.path);
+            const fileName = path.basename(imagePath);
+            archive.file(imagePath, { name: fileName });
+        };
+        archive.finalize();
+    }
+    catch (error) {
+        console.log(error.message);
+        res.sendStatus(520);
+    }
 });
 
 module.exports = router;

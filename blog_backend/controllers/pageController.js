@@ -9,8 +9,9 @@ router.get('/blogs/:id/pages/:number/', (req, res) => {
         res.status(200).json(blog);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -27,8 +28,9 @@ router.post('/blogs/:id/pages/', (req, res) => {
         res.status(200).json(data);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -45,8 +47,9 @@ router.put('/blogs/:id/pages/:number/', (req, res) => {
         res.status(200).json(data);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -63,8 +66,9 @@ router.delete('/blogs/:id/pages/:number/', (req, res) => {
         res.status(200).json(data);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);

@@ -7,8 +7,15 @@ const blogController = require('./controllers/blogController.js');
 const imageController = require('./controllers/imageController.js');
 const jwt = require('./utilities/jwt.js');
 require('./models/knex.js');
+const cors = require('cors');
+
 
 app.listen(3000, () => console.log('Listening on 3000'));
+
+app.use(cors({
+    origin: 'http://localhost:5173', // Replace with your Vite frontend URL
+    methods: 'GET,POST,PUT,DELETE',
+}));
 
 app.use('*', (req, res, next) => {
     console.log(req.method, req.url);

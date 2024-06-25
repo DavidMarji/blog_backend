@@ -4,6 +4,7 @@ const blogHandler = require('../handlers/blogHandler.js');
 
 // get all published blogs
 router.get('/blogs/all/', (req, res) => {
+    console.log('inside /blogs/all/');
     blogHandler.getAllPublishedBlogs()
     .then(publishedBlogs => {
         res.status(200).json(publishedBlogs);
@@ -16,6 +17,7 @@ router.get('/blogs/all/', (req, res) => {
 
 // search for a blog by its title
 router.get('/blogs/titles/:title/', (req, res) => {
+    console.log('inside /blogs/titles/:title/');
     blogHandler.getOneBlogByTitle(req.params.title, req.sessionUserId)
     .then(blog => {
         res.status(200).json(blog);
@@ -28,13 +30,15 @@ router.get('/blogs/titles/:title/', (req, res) => {
 
 // get a blog by its id specific blog
 router.get('/blogs/:id/', (req, res) => {
+    console.log('inside /blogs/:id/');
     blogHandler.getOneBlogById(req.params.id, req.sessionUserId)
     .then(blog => {
         res.status(200).send(blog);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -45,13 +49,15 @@ router.get('/blogs/:id/', (req, res) => {
 
 // create a blog
 router.post('/blogs/', (req, res) => {
+    console.log('inside /blogs/');
     blogHandler.createBlog(req.body.title, req.sessionUserId)
     .then(data => {
         res.sendStatus(200);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -61,15 +67,17 @@ router.post('/blogs/', (req, res) => {
 });
 
 // publish a blog
-router.put('/blogs/:id/publish', (req, res) => {
+router.put('/blogs/:id/publish/', (req, res) => {
+    console.log('inside /blogs/:id/publish/');
     blogHandler.publishBlog(req.params.id, req.sessionUserId)
     .then(rowsAffected => {
         if(rowsAffected > 0) res.sendStatus(200);
         else res.sendStatus(520);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -86,8 +94,9 @@ router.put('/blogs/:id/:title/', (req, res) => {
         else res.sendStatus(520);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -103,8 +112,9 @@ router.delete('/blogs/:id/', (req, res) => {
         res.sendStatus(200);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -120,8 +130,9 @@ router.get('/accounts/current/blogs/all', (req, res) => {
         res.status(200).json(blogs);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -137,8 +148,9 @@ router.get('/accounts/current/blogs/unpublished/all', (req, res) => {
         res.status(200).json(blogs);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -154,8 +166,9 @@ router.get('/accounts/:username/blogs/published/all', (req, res) => {
         res.status(200).json(blogs);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);

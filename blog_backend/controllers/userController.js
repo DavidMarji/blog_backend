@@ -9,8 +9,9 @@ router.post('/accounts/signup/', (req, res) => {
         res.status(200).json(jwt);
     })
     .catch (error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -26,8 +27,9 @@ router.post('/accounts/login/', (req, res) => {
         res.status(200).json(jwt);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -43,8 +45,9 @@ router.get('/accounts/:username/', (req, res) => {
         res.status(200).json(user);
     })
     .catch (error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
@@ -61,8 +64,9 @@ router.delete('/accouts/:username/', (req, res) => {
         res.sendStatus(200);
     })
     .catch(error => {
-        if(error.message.parseInt() !== NaN) {
-            res.sendStatus(error.message.parseInt());
+        const code = parseInt(error.message);
+        if(code !== NaN) {
+            res.sendStatus(code);
         }
         else {
             console.log(error.message);
