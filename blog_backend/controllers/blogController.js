@@ -48,7 +48,8 @@ router.get('/blogs/:id/', (req, res) => {
 router.post('/blogs/', (req, res) => {
     blogHandler.createBlog(req.body.title, req.sessionUserId)
     .then(data => {
-        res.sendStatus(200);
+        console.log(data);
+        res.status(200).json(data.id);
     })
     .catch(error => {
         const code = parseInt(error.message);

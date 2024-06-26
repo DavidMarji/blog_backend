@@ -19,7 +19,7 @@ class Image extends Model {
     }
 
     static get relationMappings() {
-        const Page = require('../Page.js');
+        const Page = require('./Page.js');
 
         return {
             page : {

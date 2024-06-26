@@ -20,7 +20,7 @@ class Blog extends Model {
 
     static get relationMappings() {
         const User = require('./User.js');
-        const Page = require('../Page.js');
+        const Page = require('./Page.js');
 
         return {
             author : {

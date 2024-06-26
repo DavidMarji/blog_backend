@@ -24,7 +24,7 @@ router.get('/blogs/:id/pages/:number/', (req, res) => {
 router.post('/blogs/:id/pages/', (req, res) => {
     pageHandler.createNewPage(req.params.id, req.sessionUserId)
     .then(data => {
-        res.status(200).json(data);
+        res.status(200).json(data.page_content);
     })
     .catch(error => {
         const code = parseInt(error.message);
@@ -40,7 +40,8 @@ router.post('/blogs/:id/pages/', (req, res) => {
 
 // update a page
 router.put('/blogs/:id/pages/:number/', (req, res) => {
-    pageHandler.updatePage(req.params.id, req.params.number, req.body.newPageContent)
+    pageHandler.updatePage(req.params.id, req.params.number, 
+        req.body.newPageContent, req.sessionUserId)
     .then(data => {
         res.status(200).json(data);
     })
