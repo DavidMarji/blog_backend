@@ -30,6 +30,7 @@ app.get('/favico.ico', (req, res) => {
 });
 
 app.use((req, res, next) => {
+    console.log("this is req.headers.authentication", req.headers.authentication);
     const verified = jwt.verifyAccessToken(req.headers.authentication);
     if(req.path !== '/accounts/login/'
         && req.path !== '/accounts/signup/'){
@@ -52,3 +53,8 @@ app.use(userController);
 app.use(blogController);
 app.use(pageController);
 app.use(imageController);
+
+// user tries to access a page that doesnt have rest mapping
+app.get('*', (req, res) => {
+    res.sendStatus(404);
+});
