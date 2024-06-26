@@ -24,7 +24,6 @@ router.get('/blogs/:id/pages/:number/', (req, res) => {
 router.post('/blogs/:id/pages/', (req, res) => {
     pageHandler.createNewPage(req.params.id, req.sessionUserId)
     .then(data => {
-        console.log(data);
         res.status(200).json(data);
     })
     .catch(error => {
@@ -43,7 +42,6 @@ router.post('/blogs/:id/pages/', (req, res) => {
 router.put('/blogs/:id/pages/:number/', (req, res) => {
     pageHandler.updatePage(req.params.id, req.params.number, req.body.newPageContent)
     .then(data => {
-        console.log(data);
         res.status(200).json(data);
     })
     .catch(error => {
@@ -62,7 +60,6 @@ router.put('/blogs/:id/pages/:number/', (req, res) => {
 router.delete('/blogs/:id/pages/:number/', (req, res) => {
     pageHandler.deletePage(req.params.id, req.params.number, req.sessionUserId)
     .then(data => {
-        console.log(data);
         res.status(200).json(data);
     })
     .catch(error => {

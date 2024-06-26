@@ -60,8 +60,7 @@ router.get('/accounts/:username/', (req, res) => {
 router.delete('/accouts/:username/', (req, res) => {
     userHandler.deleteUser(req.params.username, req.sessionUserId)
     .then(data => {
-        console.log(data);
-        res.sendStatus(200);
+        res.status(200).json(data);
     })
     .catch(error => {
         const code = parseInt(error.message);

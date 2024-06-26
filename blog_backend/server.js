@@ -30,7 +30,6 @@ app.get('/favico.ico', (req, res) => {
 });
 
 app.use((req, res, next) => {
-    console.log("this is req.headers.authentication", req.headers.authentication);
     const verified = jwt.verifyAccessToken(req.headers.authentication);
     if(req.path !== '/accounts/login/'
         && req.path !== '/accounts/signup/'){

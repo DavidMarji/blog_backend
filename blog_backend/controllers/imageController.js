@@ -17,7 +17,6 @@ const imageHandler = require('../handlers/imageHandler.js');
 
 // save an image after a user uploads it
 router.post('/blogs/:id/pages/:number/images/', upload.single('image'), (req, res) => {
-    console.log('inside /blogs/:id/pages/:number/images/');
     imageHandler.saveImage(req.params.id, req.params.number, req.file.path, req.sessionUserId)
     .then(image => {
         res.status(200).json(image);
@@ -36,10 +35,8 @@ router.post('/blogs/:id/pages/:number/images/', upload.single('image'), (req, re
 
 // delete an image after a user wanted to delete it
 router.delete('/blogs/:id/pages/:number/images/:imageId', (req, res) => {
-    console.log('inside /blogs/:id/pages/:number/images/');
     imageHandler.deleteImage(req.params.id, req.params.number, req.params.imageId, req.sessionUserId)
     .then(data => {
-        console.log(data);
         res.status(200).json(data);
     })
     .catch(error => {
