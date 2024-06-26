@@ -10,7 +10,7 @@ router.post('/accounts/signup/', (req, res) => {
     })
     .catch (error => {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        if(code) {
             res.sendStatus(code);
         }
         else {
@@ -28,7 +28,7 @@ router.post('/accounts/login/', (req, res) => {
     })
     .catch(error => {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        if(code) {
             res.sendStatus(code);
         }
         else {
@@ -46,7 +46,7 @@ router.get('/accounts/:username/', (req, res) => {
     })
     .catch (error => {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        if(code) {
             res.sendStatus(code);
         }
         else {
@@ -64,7 +64,7 @@ router.delete('/accouts/:username/', (req, res) => {
     })
     .catch(error => {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        if(code) {
             res.sendStatus(code);
         }
         else {

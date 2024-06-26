@@ -23,7 +23,7 @@ router.post('/blogs/:id/pages/:number/images/', upload.single('image'), (req, re
     })
     .catch(error => {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        if(code) {
             res.sendStatus(code);
         }
         else {
@@ -41,7 +41,7 @@ router.delete('/blogs/:id/pages/:number/images/:imageId', (req, res) => {
     })
     .catch(error => {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        if(code) {
             res.sendStatus(code);
         }
         else {
@@ -59,7 +59,7 @@ router.use('/blogs/:id/pages/:number/images/', async (req, res, next) => {
     }
     catch (error) {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        if(code) {
             res.sendStatus(code);
         }
         else {

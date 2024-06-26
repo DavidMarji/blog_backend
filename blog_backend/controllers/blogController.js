@@ -34,7 +34,7 @@ router.get('/blogs/:id/', (req, res) => {
     })
     .catch(error => {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        if(code) {
             res.sendStatus(code);
         }
         else {
@@ -48,12 +48,13 @@ router.get('/blogs/:id/', (req, res) => {
 router.post('/blogs/', (req, res) => {
     blogHandler.createBlog(req.body.title, req.sessionUserId)
     .then(data => {
-        console.log(data);
+        console.log("this is data", data);
         res.status(200).json(data.id);
     })
     .catch(error => {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        console.log(code);
+        if(code) {
             res.sendStatus(code);
         }
         else {
@@ -72,7 +73,7 @@ router.put('/blogs/:id/publish/', (req, res) => {
     })
     .catch(error => {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        if(code) {
             res.sendStatus(code);
         }
         else {
@@ -91,7 +92,7 @@ router.put('/blogs/:id/unpublish/', (req, res) => {
     })
     .catch(error => {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        if(code) {
             res.sendStatus(code);
         }
         else {
@@ -110,7 +111,7 @@ router.put('/blogs/:id/:title/', (req, res) => {
     })
     .catch(error => {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        if(code) {
             res.sendStatus(code);
         }
         else {
@@ -128,7 +129,7 @@ router.delete('/blogs/:id/', (req, res) => {
     })
     .catch(error => {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        if(code) {
             res.sendStatus(code);
         }
         else {
@@ -146,7 +147,7 @@ router.get('/accounts/current/blogs/all/', (req, res) => {
     })
     .catch(error => {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        if(code) {
             res.sendStatus(code);
         }
         else {
@@ -164,7 +165,7 @@ router.get('/accounts/current/blogs/unpublished/all/', (req, res) => {
     })
     .catch(error => {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        if(code) {
             res.sendStatus(code);
         }
         else {
@@ -182,7 +183,7 @@ router.get('/accounts/:username/blogs/published/all/', (req, res) => {
     })
     .catch(error => {
         const code = parseInt(error.message);
-        if(code !== NaN) {
+        if(code) {
             res.sendStatus(code);
         }
         else {
