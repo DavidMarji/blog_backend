@@ -3,6 +3,8 @@ const router = express.Router();
 const path = require('path');
 const multer = require('multer');
 const uuid = require('../utilities/hashing.js').generateUUID;
+const turnToInteger = require('../handlers/integerHandler.js').turnToInteger;
+
 const storage = multer.diskStorage({
     destination : '../images',
     filename : function(req, file, cb) {
@@ -15,8 +17,14 @@ const upload = multer({ storage : storage });
 const archiver = require('archiver');
 const imageHandler = require('../handlers/imageHandler.js');
 
+// the following middlewares have to be route specific because the app only receives '/'
+router.use((req, res, next) => {
+    console.log(req.method, req.path);
+    next();
+});
+
 // save an image after a user uploads it
-router.post('/blogs/:id/pages/:number/images/', upload.single('image'), (req, res) => {
+router.post('/blogs/:id/pages/:number/images/', upload.single('image'), turnToInteger, (req, res) => {
     imageHandler.saveImage(req.params.id, req.params.number, req.file.path, req.sessionUserId)
     .then(image => {
         res.status(200).json(image);
@@ -34,7 +42,7 @@ router.post('/blogs/:id/pages/:number/images/', upload.single('image'), (req, re
 });
 
 // delete an image after a user wanted to delete it
-router.delete('/blogs/:id/pages/:number/images/:imageId', (req, res) => {
+router.delete('/blogs/:id/pages/:number/images/:imageId', turnToInteger, (req, res) => {
     imageHandler.deleteImage(req.params.id, req.params.number, req.params.imageId, req.sessionUserId)
     .then(data => {
         res.status(200).json(data);
@@ -51,7 +59,7 @@ router.delete('/blogs/:id/pages/:number/images/:imageId', (req, res) => {
     });
 });
 
-router.use('/blogs/:id/pages/:number/images/', async (req, res, next) => {
+router.use('/blogs/:id/pages/:number/images/', turnToInteger, async (req, res, next) => {
     try {
         const images = await imageHandler.getPageImages(req.params.id, req.params.number, req.sessionUserId);
         req.images = images;

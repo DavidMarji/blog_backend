@@ -17,11 +17,6 @@ app.use(cors({
     methods: 'GET,POST,PUT,DELETE',
 }));
 
-app.use('*', (req, res, next) => {
-    console.log(req.method, req.url);
-    next();
-});
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -31,16 +26,17 @@ app.get('/favico.ico', (req, res) => {
 
 app.use((req, res, next) => {
     const verified = jwt.verifyAccessToken(req.headers.authentication);
-    if(req.path !== '/accounts/login/'
-        && req.path !== '/accounts/signup/'){
-        
-        if(!verified.success){
-            res.sendStatus(401);
-            return;
-        }
-        req.sessionUsername = verified.data.username;
-        req.sessionUserId = verified.data.id;
+    if(req.path !== '/accounts/signup/' 
+        && req.path!== '/accounts/login/') {
+
+            if(!verified.success){
+                res.sendStatus(401);
+                return;
+            }
+            req.sessionUsername = verified.data.username;
+            req.sessionUserId = parseInt(verified.data.id);
     }
+
     next();
 });
 

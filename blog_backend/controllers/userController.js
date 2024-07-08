@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const userHandler = require('../handlers/userHandler.js');
 
+// the following middlewares have to be route specific because the app only receives '/'
+router.use((req, res, next) => {
+    console.log(req.method, req.path);
+    next();
+});
+
 // account sign up
 router.post('/accounts/signup/', (req, res) => {
     userHandler.signUp(req.body.username, req.body.email, req.body.password)

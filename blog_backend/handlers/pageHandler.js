@@ -3,7 +3,6 @@ const Page = require('../models/schema/Page.js');
 const getOneBlog = require('./blogHandler.js').getOneBlogById;
 
 const getPageFromBlog = async function getPageFromBlog(blogId, pageNumber, userId) {
-    
     if(pageNumber < 1) throw new Error(400);
     const blog = await getOneBlog(blogId, userId);
 
@@ -16,7 +15,6 @@ const getPageFromBlog = async function getPageFromBlog(blogId, pageNumber, userI
 };
 
 const createNewPage = async function createNewPage(blogId, userId) {
-    
     const blog = await getOneBlog(blogId, userId);
     if(blog.published) throw new Error(409);
 

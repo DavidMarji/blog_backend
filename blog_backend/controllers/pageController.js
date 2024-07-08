@@ -1,9 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const pageHandler = require('../handlers/pageHandler.js');
+const turnToInteger = require('../handlers/integerHandler.js').turnToInteger;
+
+// the following middlewares have to be route specific because the app only receives '/'
+router.use((req, res, next) => {
+    console.log(req.method, req.path);
+    next();
+});
 
 // get a specific page of a blog
-router.get('/blogs/:id/pages/:number/', (req, res) => {
+router.get('/blogs/:id/pages/:number/', turnToInteger, (req, res) => {
     pageHandler.getPageFromBlog(req.params.id, req.params.number, req.sessionUserId)
     .then(blog => {
         res.status(200).json(blog);
@@ -21,7 +28,7 @@ router.get('/blogs/:id/pages/:number/', (req, res) => {
 });
 
 // create a new page
-router.post('/blogs/:id/pages/', (req, res) => {
+router.post('/blogs/:id/pages/', turnToInteger, (req, res) => {
     pageHandler.createNewPage(req.params.id, req.sessionUserId)
     .then(data => {
         res.status(200).json(data.page_content);
@@ -32,14 +39,14 @@ router.post('/blogs/:id/pages/', (req, res) => {
             res.sendStatus(code);
         }
         else {
-            console.log(error.message);
+            console.log(error);
             res.sendStatus(520);
         }
     });
 });
 
 // update a page
-router.put('/blogs/:id/pages/:number/', (req, res) => {
+router.put('/blogs/:id/pages/:number/', turnToInteger, (req, res) => {
     pageHandler.updatePage(req.params.id, req.params.number, 
         req.body.newPageContent, req.sessionUserId)
     .then(data => {
@@ -58,7 +65,7 @@ router.put('/blogs/:id/pages/:number/', (req, res) => {
 });
 
 // delete a page
-router.delete('/blogs/:id/pages/:number/', (req, res) => {
+router.delete('/blogs/:id/pages/:number/', turnToInteger, (req, res) => {
     pageHandler.deletePage(req.params.id, req.params.number, req.sessionUserId)
     .then(data => {
         res.status(200).json(data);

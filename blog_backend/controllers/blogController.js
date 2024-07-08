@@ -1,6 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const blogHandler = require('../handlers/blogHandler.js');
+const turnToInteger = require('../handlers/integerHandler.js').turnToInteger;
+
+// the following middlewares have to be route specific because the app only receives '/'
+router.use((req, res, next) => {
+    console.log(req.method, req.path);
+    next();
+});
 
 // get all published blogs
 router.get('/blogs/all/', (req, res) => {
@@ -15,8 +22,8 @@ router.get('/blogs/all/', (req, res) => {
 });
 
 // search for a blog by its title
-router.get('/blogs/titles/:title/', (req, res) => {
-    blogHandler.getOneBlogByTitle(req.params.title, req.sessionUserId)
+router.get('/blogs/titles/', (req, res) => {
+    blogHandler.getOneBlogByTitle(req.body.title, req.sessionUserId)
     .then(blog => {
         res.status(200).json(blog);
     })
@@ -27,7 +34,7 @@ router.get('/blogs/titles/:title/', (req, res) => {
 });
 
 // get a blog by its id specific blog
-router.get('/blogs/:id/', (req, res) => {
+router.get('/blogs/:id/', turnToInteger, (req, res) => {
     blogHandler.getOneBlogById(req.params.id, req.sessionUserId)
     .then(blog => {
         res.status(200).send(blog);
@@ -48,7 +55,6 @@ router.get('/blogs/:id/', (req, res) => {
 router.post('/blogs/', (req, res) => {
     blogHandler.createBlog(req.body.title, req.sessionUserId)
     .then(data => {
-        console.log("this is data", data);
         res.status(200).json(data.id);
     })
     .catch(error => {
@@ -65,7 +71,7 @@ router.post('/blogs/', (req, res) => {
 });
 
 // publish a blog
-router.put('/blogs/:id/publish/', (req, res) => {
+router.put('/blogs/:id/publish/', turnToInteger, (req, res) => {
     blogHandler.publishBlog(req.params.id, req.sessionUserId)
     .then(rowsAffected => {
         if(rowsAffected > 0) res.sendStatus(200);
@@ -84,7 +90,7 @@ router.put('/blogs/:id/publish/', (req, res) => {
 });
 
 // unpublish blog
-router.put('/blogs/:id/unpublish/', (req, res) => {
+router.put('/blogs/:id/unpublish/', turnToInteger, (req, res) => {
     blogHandler.unpublishBlog(req.params.id, req.sessionUserId)
     .then(rowsAffected => {
         if(rowsAffected > 0) res.sendStatus(200);
@@ -103,8 +109,8 @@ router.put('/blogs/:id/unpublish/', (req, res) => {
 });
 
 // update a blog's title
-router.put('/blogs/:id/:title/', (req, res) => {
-    blogHandler.updateBlogTitle(req.params.id, req.params.title, req.sessionUserId)
+router.put('/blogs/:id/', turnToInteger, (req, res) => {
+    blogHandler.updateBlogTitle(req.params.id, req.body.title, req.sessionUserId)
     .then(rowsAffected => {
         if(rowsAffected > 0) res.sendStatus(200);
         else res.sendStatus(520);
@@ -122,7 +128,7 @@ router.put('/blogs/:id/:title/', (req, res) => {
 });
 
 // delete a blog
-router.delete('/blogs/:id/', (req, res) => {
+router.delete('/blogs/:id/', turnToInteger, (req, res) => {
     blogHandler.deleteBlog(req.params.id, req.sessionUserId)
     .then(() => {
         res.sendStatus(200);
