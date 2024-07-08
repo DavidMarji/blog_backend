@@ -9,6 +9,7 @@ exports.up = function(knex) {
             table.integer('author_id').unsigned().notNullable().references('id').inTable('Users').onDelete("CASCADE");
             table.string('title', 50).unique().notNullable();
             table.boolean('published').defaultTo(false).notNullable();
+            table.integer('number_of_pages').unsigned().notNullable();
         });
 };
 

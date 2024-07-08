@@ -1,4 +1,5 @@
 const { Model } = require('objection');
+const Blog = require('./Blog.js');
 
 class Page extends Model {
     static get tableName() {
@@ -21,7 +22,6 @@ class Page extends Model {
 
     static get relationMappings() {
         const Image = require('./Image.js');
-        const Blog = require('./Blog.js');
 
         return {
             blog : {
@@ -45,12 +45,19 @@ class Page extends Model {
     }
 
     static async createPage(blogId, pageNumber) {
-        return await Page.query()
-            .insert({
-                blog_id : blogId,
-                page_content : "",
-                page_number : pageNumber,
+        return await Page.transaction(async trx => {
+            const createdPage = await Page.query(trx).insert({
+                blog_id: blogId,
+                page_content: "",
+                page_number: pageNumber,
             });
+        
+            const update = await Blog.query(trx).patch({
+                number_of_pages: Page.query(trx).count().where('blog_id', blogId)
+            }).where('id', blogId);
+
+            return createdPage;
+        });
     }
 
     async updatePage(newPageContent) {
@@ -60,12 +67,31 @@ class Page extends Model {
     }
 
     async deleteThisPage() {
-        return await this.$query()
-            .delete();
+        return await this.$query().transaction(async trx => {
+            const numRows = await this.$query(trx).delete();
+
+            const update = await Blog.query(trx).patch({
+                number_of_pages: Page.query(trx).count().where('blog_id', this.blog_id)
+            }).where('id', this.blog_id);
+
+            return numRows;
+        });
     }
 
     async getPageImages() {
         return await this.$relatedQuery('images');
+    }
+
+    async $beforeInsert(queryContext) {
+        await super.$beforeInsert(queryContext);
+        const blogId = this.blog_id;
+        await Blog.query(queryContext.transaction).increment('number_of_pages', 1).where('id', blogId);
+    }
+
+    async $beforeDelete(queryContext) {
+        await super.$beforeDelete(queryContext);
+        const blogId = this.blog_id;
+        await Blog.query(queryContext.transaction).decrement('number_of_pages', 1).where('id', blogId);
     }
 }
 

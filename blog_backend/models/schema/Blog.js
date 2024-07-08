@@ -8,12 +8,13 @@ class Blog extends Model {
     static get jsonSchema() {
         return {
             type : 'object',
-            required: ['author_id', 'title'],
+            required: ['author_id', 'title', 'number_of_pages'],
             properties: {
                 id : { type : 'integer' },
                 author_id : { type : 'integer' },
                 title : { type : 'string', minLength: 5, maxLength: 100 },
-                published : { type : 'boolean' }
+                published : { type : 'boolean' },
+                number_of_pages : { type : 'integer' }
             }
         };
     }
@@ -74,7 +75,8 @@ class Blog extends Model {
             .insert({
                 author_id : author_id,
                 title : title,
-                published : false
+                published : false,
+                number_of_pages : 0
             });
     }
 

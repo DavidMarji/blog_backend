@@ -73,7 +73,7 @@ class User extends Model {
     }
 
     static async getAllPublishedUserBlogs(username) {
-        await User.query()
+        return await User.query()
             .findOne({
                 username : username
             })

@@ -29,7 +29,6 @@ const getOneBlogByTitle = async function getOneBlogByTitle(title, userId) {
 const getAllUserBlogs = async function getAllUserBlogs(userId) {
 
     const userWithBlogs = await User.getAllUserBlogs(userId);
-
     // user has no blogs which is fine 
     return userWithBlogs ? userWithBlogs.blogs : [];
     // throws 404
