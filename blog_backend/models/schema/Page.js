@@ -67,12 +67,22 @@ class Page extends Model {
     }
 
     async deleteThisPage() {
-        return await this.$query().transaction(async trx => {
+        return await Page.transaction(async trx => {
+            const pageNumber = this.page_number;
+            const blogId = this.blog_id;
+
             const numRows = await this.$query(trx).delete();
 
             const update = await Blog.query(trx).patch({
                 number_of_pages: Page.query(trx).count().where('blog_id', this.blog_id)
             }).where('id', this.blog_id);
+
+            await Page.query(trx)
+                .patch({
+                    page_number: Page.raw('?? - 1', ['page_number'])
+                })
+                .where('blog_id', blogId)
+                .andWhere('page_number', '>', pageNumber);
 
             return numRows;
         });

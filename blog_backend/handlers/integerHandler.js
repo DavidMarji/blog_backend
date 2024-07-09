@@ -7,6 +7,7 @@ const turnToInteger = function turnToInteger(req, res, next) {
 
             if (isNaN(req.params[param])) {
                 res.sendStatus(409);
+                return;
             }
         }
     };

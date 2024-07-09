@@ -40,6 +40,8 @@ const deletePage = async function deletePage(blogId, pageNumber, userId){
     const blog = await getOneBlog(blogId, userId);
     if(blog.author_id !== userId) throw new Error(401);
 
+    if(blog.number_of_pages === 1) throw new Error(403);
+
     const page = await getPageFromBlog(blogId, pageNumber, userId);
     const images = await page.getPageImages();
 
@@ -49,7 +51,7 @@ const deletePage = async function deletePage(blogId, pageNumber, userId){
 
     return await page.deleteThisPage();  
 
-    // throws 404, 400 (if page number < 1), and 401
+    // throws 404, 400 (if page number < 1), 403, and 401
 }
 
 module.exports = {
