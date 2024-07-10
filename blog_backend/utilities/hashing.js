@@ -6,8 +6,8 @@ function hashText(text) {
 	return hash.digest('hex');
 }
 
-function generateUUID(text) {
-	return crypto.generateUUID(text);
+function generateUUID() {
+	return crypto.randomUUID();
 }
 
 module.exports = {

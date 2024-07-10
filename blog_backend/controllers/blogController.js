@@ -146,26 +146,27 @@ router.delete('/blogs/:id/', turnToInteger, (req, res) => {
 });
 
 // get all of a user's blogs
-router.get('/accounts/current/blogs/all/', (req, res) => {
-    blogHandler.getAllUserBlogs(req.sessionUserId)
+router.get('/accounts/:username/blogs/all/', (req, res) => {
+    blogHandler.getAllUserBlogs(req.params.username, req.sessionUserId)
     .then(blogs => {
         res.status(200).json(blogs);
     })
     .catch(error => {
+
         const code = parseInt(error.message);
         if(code) {
             res.sendStatus(code);
         }
         else {
-            console.log(error.message);
+            console.log(error);
             res.sendStatus(520);
         }
     });
 });
 
 // get all of a user's unpublished blogs
-router.get('/accounts/current/blogs/unpublished/all/', (req, res) => {
-    blogHandler.getAllUnpublishedUserBlogs(req.sessionUserId)
+router.get('/accounts/:username/blogs/unpublished/all/', (req, res) => {
+    blogHandler.getAllUnpublishedUserBlogs(req.params.username, req.sessionUserId)
     .then(blogs => {
         res.status(200).json(blogs);
     })

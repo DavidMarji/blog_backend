@@ -6,9 +6,9 @@ const uuid = require('../utilities/hashing.js').generateUUID;
 const turnToInteger = require('../handlers/integerHandler.js').turnToInteger;
 
 const storage = multer.diskStorage({
-    destination : '../images',
+    destination : './images',
     filename : function(req, file, cb) {
-        const uniqueFileName = uuid(file.originalname).toString();
+        const uniqueFileName = uuid().toString();
         const fileExtension = path.extname(file.originalname);
         cb(null, uniqueFileName + fileExtension);
     }
@@ -30,12 +30,12 @@ router.post('/blogs/:id/pages/:number/images/', upload.single('image'), turnToIn
         res.status(200).json(image);
     })
     .catch(error => {
-        const code = parseInt(error.message);
+        const code = parseInt(error);
         if(code) {
             res.sendStatus(code);
         }
         else {
-            console.log(error.message);
+            console.log(error);
             res.sendStatus(520);
         }
     });

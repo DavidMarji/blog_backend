@@ -1,6 +1,7 @@
 const jwt = require('../utilities/jwt.js');
 const Blog = require('../models/schema/Blog.js');
 const User = require('../models/schema/User.js');
+const Page = require('../models/schema/Page.js');
 
 // get all published blogs (accessable to any logged in user)
 const getAllPublishedBlogs = async function getAllPublishedBlogs() {
@@ -26,16 +27,20 @@ const getOneBlogByTitle = async function getOneBlogByTitle(title, userId) {
     //throws 401 and 404
 }
 
-const getAllUserBlogs = async function getAllUserBlogs(userId) {
+const getAllUserBlogs = async function getAllUserBlogs(username, userId) {
+    const user = await User.findOneUserByUsername(username);
+    if(user.id !== userId) throw new Error(401);
 
     const userWithBlogs = await User.getAllUserBlogs(userId);
     // user has no blogs which is fine 
     return userWithBlogs ? userWithBlogs.blogs : [];
-    // throws 404
+    // throws 404 and 401
 }
 
-const getAllUnpublishedUserBlogs = async function getAllUnpublishedUserBlogs(userId) {
-    
+const getAllUnpublishedUserBlogs = async function getAllUnpublishedUserBlogs(username, userId) {
+    const user = await User.findOneUserByUsername(username);
+    if(user.id !== userId) throw new Error(401);
+
     const userWithBlogs = await User.getAllUnpublishedUserBlogs(userId);
 
     // user has no unpublished blogs which is fine
@@ -76,7 +81,9 @@ const getOneBlogById = async function getOneBlogById(id, userId) {
 const createBlog = async function createBlog(title, userId) {
     
     try {
-        return await Blog.createBlog(title, userId);
+        const blog = await Blog.createBlog(title, userId);
+        const page = await Page.createPage(blog.id, blog.number_of_pages + 1);
+        return blog;
     }
     catch (error) {
         console.log(error.message);
