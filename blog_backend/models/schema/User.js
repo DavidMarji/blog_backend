@@ -103,6 +103,10 @@ class User extends Model {
         return await this.$query()
             .delete();
     }
+
+    async getAllUserblogs() {
+        return await this.$relatedQuery('blogs');
+    }
 }
 
 module.exports = User;

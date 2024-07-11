@@ -1,11 +1,10 @@
 const { Model } = require('objection');
-const fs = require('fs');
 
 class Image extends Model {
     static get tableName() {
         return 'Images';
     }
-
+    
     static get jsonSchema() {
         return {
             type : 'object',
@@ -17,10 +16,10 @@ class Image extends Model {
             }
         };
     }
-
+    
     static get relationMappings() {
         const Page = require('./Page.js');
-
+        
         return {
             page : {
                 relation : Model.BelongsToOneRelation,
@@ -32,19 +31,18 @@ class Image extends Model {
             }
         };
     }
-
+    
     static async createImage(imagePath, pageId) {
         return await Image.query()
-            .insert({
-                imagePath : imagePath,
-                page_id : pageId
-            });
+        .insert({
+            imagePath : imagePath,
+            page_id : pageId
+        });
     }
-
+    
     async deleteImage() {
         const fs = require('fs');
         fs.unlinkSync(this.imagePath);
-
         return await this.$query()
             .delete();
     }

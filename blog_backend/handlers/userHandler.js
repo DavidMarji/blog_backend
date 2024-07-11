@@ -2,6 +2,7 @@ const hashing = require('../utilities/hashing.js');
 const userInfoVerification = require('../utilities/userInfoVerification.js');
 const jwt = require('../utilities/jwt.js');
 const User = require('../models/schema/User.js');
+const deleteBlog = require('./blogHandler.js').deleteBlog;
 
 const findOneUser = async function findOneUser(username) {
     
@@ -55,10 +56,17 @@ const login = async function login(username, password){
 // get the access token to ensure that nobody other than the user themself wants to delete their account
 const deleteUser = async function deleteUser(username, userId) {
     
-    let user = await findOneUser(username);
+    const user = await findOneUser(username);
     if(user.id === userId) {
         // return number of rows deleted
+        const blogs = await user.getAllUserblogs();
+        for(const blog of blogs) {
+            await deleteBlog(blog.id, userId);
+        }
         return await user.deleteUser();
+    }
+    else {
+        throw new Error(401);
     }
     // throws 404
 }

@@ -4,10 +4,8 @@ const getOneBlog = require('./blogHandler.js').getOneBlogById;
 const getPageFromBlog = async function getPageFromBlog(blogId, pageNumber, userId) {
     if(pageNumber < 1) throw new Error(400);
     const blog = await getOneBlog(blogId, userId);
-
     // find the blog's pages
     const page = await blog.getPageFromBlog(pageNumber);
-    
     if(!page) throw new Error(404);
     return page;
     // throws 404, 400 (if page number < 1), and 401
@@ -22,7 +20,6 @@ const createNewPage = async function createNewPage(blogId, userId) {
 }
 
 const updatePage = async function updatePage(blogId, pageNumber, newPageContent, userId) {
-
     const blog = await getOneBlog(blogId, userId);
     if(blog.author_id !== userId) throw new Error(401);
 

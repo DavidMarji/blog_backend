@@ -1,6 +1,7 @@
 const Blog = require('../models/schema/Blog.js');
 const User = require('../models/schema/User.js');
 const Page = require('../models/schema/Page.js');
+const Image = require('../models/schema/Image.js');
 
 // get all published blogs (accessable to any logged in user)
 const getAllPublishedBlogs = async function getAllPublishedBlogs() {
@@ -58,7 +59,6 @@ const getAllPublishedUserBlogs = async function getAllPublishedUserBlogs(usernam
 }
 
 const updateBlogTitle = async function updateBlogTitle(id, newTitle, userId) {
-
     const blog = await getOneBlogById(id, userId);
     // another user tries to update a blog that they didn't create
     if(blog.author_id !== userId) throw new Error(401);
@@ -70,7 +70,6 @@ const updateBlogTitle = async function updateBlogTitle(id, newTitle, userId) {
 const getOneBlogById = async function getOneBlogById(id, userId) {
     
     const blog = await Blog.getOneBlogById(id);
-    
     // user tries to access unpublished blog that they didn't create
     if(!blog.published && blog.author_id !== userId) throw new Error(401);
     return blog;
@@ -128,10 +127,9 @@ const deleteBlog = async function deleteBlog(id, userId) {
         for(const image of images) {
             await image.deleteImage();
         }
-        await page.deleteThisPage();
     }
     // return number of rows deleted
-    return await blog.deleteBlog(id);
+    return await blog.deleteBlog();
     // throws 404 and 401
 }
 
