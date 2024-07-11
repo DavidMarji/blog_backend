@@ -24,6 +24,8 @@ const deleteImage = async function deleteImage(blogId, pageNumber, imageId, user
     const image = await Image.getImage(imageId);
     // delete and return num rows deleted
     return await image.deleteImage();
+
+    // throws 404, 400 (if page num < 1), and 401
 }
 
 module.exports = {

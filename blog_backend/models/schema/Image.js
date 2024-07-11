@@ -43,9 +43,7 @@ class Image extends Model {
 
     async deleteImage() {
         const fs = require('fs');
-        fs.unlink(this.imagePath, (err) => {
-            throw err;
-        });
+        fs.unlinkSync(this.imagePath);
 
         return await this.$query()
             .delete();

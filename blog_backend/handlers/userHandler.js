@@ -54,10 +54,6 @@ const login = async function login(username, password){
 
 // get the access token to ensure that nobody other than the user themself wants to delete their account
 const deleteUser = async function deleteUser(username, userId) {
-
-    // unauthorized
-    const verified = jwt.verifyAccessToken(accessToken);
-    if(!verified.success) throw new Error(401);
     
     let user = await findOneUser(username);
     if(user.id === userId) {

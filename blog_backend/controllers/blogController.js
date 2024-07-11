@@ -22,14 +22,20 @@ router.get('/blogs/all/', (req, res) => {
 });
 
 // search for a blog by its title
-router.get('/blogs/titles/', (req, res) => {
-    blogHandler.getOneBlogByTitle(req.body.title, req.sessionUserId)
+router.get('/blogs/titles/:title/', (req, res) => {
+    blogHandler.getOneBlogByTitle(req.params.title, req.sessionUserId)
     .then(blog => {
         res.status(200).json(blog);
     })
     .catch(error => {
-        console.log(error.message);
-        res.sendStatus(520);
+        const code = parseInt(error.message);
+        if(code) {
+            res.sendStatus(code);
+        }
+        else {
+            console.log(error.message);
+            res.sendStatus(520);
+        }
     });
 });
 

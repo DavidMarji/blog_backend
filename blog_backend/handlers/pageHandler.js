@@ -1,4 +1,3 @@
-const jwt = require('../utilities/jwt.js');
 const Page = require('../models/schema/Page.js');
 const getOneBlog = require('./blogHandler.js').getOneBlogById;
 

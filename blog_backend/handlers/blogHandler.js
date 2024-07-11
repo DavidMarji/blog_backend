@@ -1,4 +1,3 @@
-const jwt = require('../utilities/jwt.js');
 const Blog = require('../models/schema/Blog.js');
 const User = require('../models/schema/User.js');
 const Page = require('../models/schema/Page.js');
@@ -123,6 +122,14 @@ const deleteBlog = async function deleteBlog(id, userId) {
     
     if(blog.author_id !== userId) throw new Error(401);
 
+    const pages = await blog.getPagesFromBlog();
+    for(const page of pages) {
+        const images = await page.getPageImages();
+        for(const image of images) {
+            await image.deleteImage();
+        }
+        await page.deleteThisPage();
+    }
     // return number of rows deleted
     return await blog.deleteBlog(id);
     // throws 404 and 401

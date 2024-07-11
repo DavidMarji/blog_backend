@@ -63,7 +63,7 @@ router.get('/accounts/:username/', (req, res) => {
 });
 
 // delete an account
-router.delete('/accouts/:username/', (req, res) => {
+router.delete('/accounts/:username/', (req, res) => {
     userHandler.deleteUser(req.params.username, req.sessionUserId)
     .then(data => {
         res.status(200).json(data);
@@ -74,7 +74,7 @@ router.delete('/accouts/:username/', (req, res) => {
             res.sendStatus(code);
         }
         else {
-            console.log(error.message);
+            console.log(error);
             res.sendStatus(520);
         }
     });
