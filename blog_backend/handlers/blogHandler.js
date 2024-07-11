@@ -10,7 +10,7 @@ const getAllPublishedBlogs = async function getAllPublishedBlogs() {
     const blogs = await Blog.getAllPublishedBlogs();
     
     // if no blogs exist that is fine just return undefined and handle later
-    return blogs;
+    return blogs.length >= 20 ? blogs.slice(0, 21) : blogs.slice();
 
 }
 
