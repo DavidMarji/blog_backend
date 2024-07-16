@@ -21,11 +21,11 @@ router.get('/blogs/all/', (req, res) => {
     });
 });
 
-// search for a blog by its title
+// search for a blog by its title (returns an array of blogs that contain req.params.title)
 router.get('/blogs/titles/:title/', (req, res) => {
     blogHandler.getOneBlogByTitle(req.params.title, req.sessionUserId)
-    .then(blog => {
-        res.status(200).json(blog);
+    .then(blogs => {
+        res.status(200).json(blogs);
     })
     .catch(error => {
         const code = parseInt(error.message);

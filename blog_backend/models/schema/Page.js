@@ -14,7 +14,6 @@ class Page extends Model {
                 id : { type : 'integer' },
                 blog_id : { type : 'integer' },
                 page_content : { type : 'string', minLength : 0 },
-                // need to test if minimum : 1 works
                 page_number : { type: 'integer', minimum: 1 }
             }
         };

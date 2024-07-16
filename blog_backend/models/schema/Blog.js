@@ -49,9 +49,9 @@ class Blog extends Model {
             .where('published', true);
     }
 
-    static async getOneBlogByTitle(title) {
+    static async getBlogsByTitle(title) {
         return await Blog.query()
-            .findOne({title : title})
+            .where('title', 'ilike', `%${title}%`)
             .throwIfNotFound({ message : 404 });
     }
 

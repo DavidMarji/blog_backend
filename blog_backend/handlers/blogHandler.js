@@ -1,7 +1,6 @@
 const Blog = require('../models/schema/Blog.js');
 const User = require('../models/schema/User.js');
 const Page = require('../models/schema/Page.js');
-const Image = require('../models/schema/Image.js');
 
 // get all published blogs (accessable to any logged in user)
 const getAllPublishedBlogs = async function getAllPublishedBlogs() {
@@ -14,15 +13,16 @@ const getAllPublishedBlogs = async function getAllPublishedBlogs() {
 
 }
 
-// get on blog by its title
+// get blogs by title (if a blogs title contains `title` it would be returned back in an array)
 const getOneBlogByTitle = async function getOneBlogByTitle(title, userId) {
 
-    const blog = await Blog.getOneBlogByTitle(title);
-
+    const blogs = await Blog.getBlogsByTitle(title);
     // user tries to access an unpublished blog that they didn't create
-    if(!blog.published && blog.author_id !== userId) throw new Error(401);
+    for(const blog of blogs) {
+        if(!blog.published && blog.author_id !== userId) throw new Error(401);
+    }
 
-    return blog;
+    return blogs;
     
     //throws 401 and 404
 }
