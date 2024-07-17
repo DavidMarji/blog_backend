@@ -14,7 +14,7 @@ const getPageFromBlog = async function getPageFromBlog(blogId, pageNumber, userI
 const createNewPage = async function createNewPage(blogId, userId) {
     const blog = await getOneBlog(blogId, userId);
     if(blog.published) throw new Error(409);
-
+    console.log(blog.number_of_pages);
     return await Page.createPage(blogId, blog.number_of_pages + 1);
     // throws 404, 401, and 409 when blog is already published
 }

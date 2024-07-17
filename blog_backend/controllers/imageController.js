@@ -5,8 +5,11 @@ const multer = require('multer');
 const uuid = require('../utilities/hashing.js').generateUUID;
 const turnToInteger = require('../handlers/integerHandler.js').turnToInteger;
 
+router.use(express.static(path.join(__dirname, '..', 'public')));
 const storage = multer.diskStorage({
-    destination : './images',
+    destination : function (req, file, cb) {
+                    cb(null, path.join(__dirname, '..', 'public', 'images'));
+                },
     filename : function(req, file, cb) {
         const uniqueFileName = uuid().toString();
         const fileExtension = path.extname(file.originalname);
@@ -14,7 +17,6 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage : storage });
-const archiver = require('archiver');
 const imageHandler = require('../handlers/imageHandler.js');
 
 // the following middlewares have to be route specific because the app only receives '/'
@@ -24,10 +26,13 @@ router.use((req, res, next) => {
 });
 
 // save an image after a user uploads it
-router.post('/blogs/:id/pages/:number/images/', upload.single('image'), turnToInteger, (req, res) => {
+router.post('/blogs/:id/pages/:number/images/', turnToInteger, imageHandler.verifyUserBeforeUpload,  upload.single('image'), (req, res) => {
     imageHandler.saveImage(req.params.id, req.params.number, req.file.path, req.sessionUserId)
     .then(image => {
-        res.status(200).json(image);
+        res.status(200).json({
+            "image" : image,
+            "imageUrl" : `http://localhost:3000/images/${req.file.filename}`
+        });
     })
     .catch(error => {
         const code = parseInt(error);
@@ -57,63 +62,6 @@ router.delete('/blogs/:id/pages/:number/images/:imageId', turnToInteger, (req, r
             res.sendStatus(520);
         }
     });
-});
-
-router.use('/blogs/:id/pages/:number/images/', turnToInteger, async (req, res, next) => {
-    try {
-        const images = await imageHandler.getPageImages(req.params.id, req.params.number, req.sessionUserId);
-        req.images = images;
-        next();
-    }
-    catch (error) {
-        const code = parseInt(error.message);
-        if(code) {
-            res.sendStatus(code);
-        }
-        else {
-            console.log(error.message);
-            res.sendStatus(520);
-        }
-    }
-});
-
-// get page images
-router.get('/blogs/:id/pages/:number/images/', async (req, res) => {
-    try {
-        const images = req.images;
-
-        if(!images || images.length === 0){
-            res.status(200).json([]);
-            return;
-        } 
-        const archive = archiver('zip', {zlib: {level: 9}});
-        res.attachment('images.zip');
-        archive.on('error', (err) => {
-            res.status(500).send({ error: err.message });
-        });
-        archive.pipe(res);
-
-        const metadata = images.map(image => ({
-            imageId: image.id,
-            fileName: path.basename(image.imagePath)
-        }));
-
-        archive.append(JSON.stringify(metadata, null, 2), { name: 'metadata.json' });
-    
-        for(const image of images) {
-            const imagePath = path.join(__dirname, '..', image.imagePath);
-            const fileName = path.basename(imagePath);
-            archive.file(imagePath, {
-                name : fileName,
-                id  : image.id
-            });
-        };
-        archive.finalize();
-    }
-    catch (error) {
-        console.log(error);
-        res.sendStatus(520);
-    }
 });
 
 module.exports = router;

@@ -25,19 +25,20 @@ app.get('/favico.ico', (req, res) => {
 });
 
 app.use(async (req, res, next) => {
-    if(req.path !== '/accounts/signup/' 
-        && req.path!== '/accounts/login/') {
-
-        const verified = await jwt.verifyAccessToken(req.headers.authentication);
-
-        if(!verified.success){
-            res.sendStatus(401);
-            return;
-        }
-        req.sessionUsername = verified.data.username;
-        req.sessionUserId = parseInt(verified.data.id);
+    if (req.path.startsWith('/images/') || req.path === '/accounts/signup/' || req.path === '/accounts/login/') {
+        return next();
     }
 
+    const verified = await jwt.verifyAccessToken(req.headers.authentication);
+
+    if (!verified.success) {
+        res.sendStatus(401);
+        return;
+    }
+
+    req.sessionUsername = verified.data.username;
+    req.sessionUserId = parseInt(verified.data.id);
+    
     next();
 });
 
