@@ -18,7 +18,7 @@
   "scripts": {
     "start": "node ./server.js",
     "dev": "nodemon ./server.js",
-    "build": "npx knex migrate:latest"
+    "build": "npx knex migrate:latest --env production"
 
   }
 }
