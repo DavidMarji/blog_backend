@@ -11,8 +11,7 @@ const cors = require('cors');
 require('dotenv').config()
 
 
-app.listen(process.env.PORT, () => console.log(`Listening`));
-
+app.listen(process.env.PORT, () => console.log(`Listening on ${process.env.PORT}`));
 app.use(cors({
     origin: process.env.FRONTEND_URL,
     methods: 'GET,POST,PUT,DELETE',

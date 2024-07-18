@@ -11,7 +11,7 @@ module.exports = {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
-      database: 'blog_db'
+      database: process.env.DATABASE_NAME
     },
     migrations: {
       directory: './models/migrations'
