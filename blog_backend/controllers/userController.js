@@ -43,7 +43,41 @@ router.post('/accounts/login/', (req, res) => {
         }
     });
 });
+
+router.get(`/accounts/session/me/`, (req, res) => {
+    userHandler.findOneUser(req.sessionUsername)
+    .then(user => {
+        res.status(200).json(user.username);
+    })
+    .catch(error => {
+        const code = parseInt(error.message);
+        if(code) {
+            res.sendStatus(code);
+        }
+        else {
+            console.log(error.message);
+            res.sendStatus(520);
+        }
+    })
+});
   
+router.get('/accounts/users/:username/', (req, res) => {
+    userHandler.findUsers(req.params.username)
+    .then(users => {
+        res.status(200).json(users);
+    })
+    .catch(error => {
+        const code = parseInt(error.message);
+        if(code) {
+            res.sendStatus(code);
+        }
+        else {
+            console.log(error.message);
+            res.sendStatus(520);
+        }
+    });
+});
+
 // get the user profile
 router.get('/accounts/:username/', (req, res) => {
     userHandler.findOneUser(req.params.username)

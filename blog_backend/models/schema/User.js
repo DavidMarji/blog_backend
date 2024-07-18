@@ -86,6 +86,12 @@ class User extends Model {
             .findOne({ username : username });
     }
 
+    static async findUsersByUsername(username) {
+        return await User.query()
+            .where('username', 'ilike', `%${username}%`)
+            .throwIfNotFound(404);
+    }
+
     static async findOneUserByEmail(email) {
         return await User.query()
             .findOne({email : email});

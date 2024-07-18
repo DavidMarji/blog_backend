@@ -16,6 +16,12 @@ const findOneUser = async function findOneUser(username) {
     // throws 404
 }
 
+const findUsers = async function findUsers(username) {
+    let users = await User.findUsersByUsername(username);
+
+    return users;
+}
+
 const signUp = async function signUp(username, email, password){
     
     if(password !== undefined && password !== null) password = hashing.hashText(password);
@@ -71,4 +77,10 @@ const deleteUser = async function deleteUser(username, userId) {
     // throws 404
 }
 
-module.exports = {signUp, login, findOneUser, deleteUser};
+module.exports = {
+    signUp, 
+    login, 
+    findOneUser, 
+    deleteUser, 
+    findUsers
+};
