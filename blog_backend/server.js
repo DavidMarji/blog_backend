@@ -8,12 +8,13 @@ const imageController = require('./controllers/imageController.js');
 const jwt = require('./utilities/jwt.js');
 require('./models/knex.js');
 const cors = require('cors');
+require('dotenv').config()
 
 
-app.listen(3000, () => console.log('Listening on 3000'));
+app.listen(process.env.PORT, () => console.log(`Listening`));
 
 app.use(cors({
-    origin: 'http://localhost:5173', // Replace with your Vite frontend URL
+    origin: process.env.FRONTEND_URL,
     methods: 'GET,POST,PUT,DELETE',
 }));
 

@@ -1,5 +1,5 @@
 // Update with your config settings.
-
+require('dotenv').config()
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
@@ -8,9 +8,9 @@ module.exports = {
   development: {
     client: 'pg',
     connection: {
-      host: '127.0.0.1',
-      user: 'several',
-      password: '123',
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
       database: 'blog_db'
     },
     migrations: {

@@ -4,6 +4,7 @@ const path = require('path');
 const multer = require('multer');
 const uuid = require('../utilities/hashing.js').generateUUID;
 const turnToInteger = require('../handlers/integerHandler.js').turnToInteger;
+require('dotenv').config();
 
 router.use(express.static(path.join(__dirname, '..', 'public')));
 const storage = multer.diskStorage({
@@ -31,7 +32,7 @@ router.post('/blogs/:id/pages/:number/images/', turnToInteger, imageHandler.veri
     .then(image => {
         res.status(200).json({
             "image" : image,
-            "imageUrl" : `http://localhost:3000/images/${req.file.filename}`
+            "imageUrl" : `${process.env.BACKEND_URL}/images/${req.file.filename}`
         });
     })
     .catch(error => {
