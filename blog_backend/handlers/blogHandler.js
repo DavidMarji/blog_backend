@@ -14,7 +14,7 @@ const getAllPublishedBlogs = async function getAllPublishedBlogs() {
 }
 
 // get blogs by title (if a blogs title contains `title` it would be returned back in an array)
-const getOneBlogByTitle = async function getOneBlogByTitle(title, userId) {
+const getBlogsByTitle = async function getBlogsByTitle(title, userId) {
 
     const blogs = await Blog.getBlogsByTitle(title);
     // user tries to access an unpublished blog that they didn't create
@@ -138,7 +138,7 @@ const deleteBlog = async function deleteBlog(id, userId) {
 
 module.exports = {
     getAllPublishedBlogs,
-    getOneBlogByTitle, 
+    getBlogsByTitle, 
     getAllUserBlogs, 
     getAllUnpublishedUserBlogs, 
     getAllPublishedUserBlogs,

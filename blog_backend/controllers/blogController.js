@@ -23,7 +23,7 @@ router.get('/blogs/all/', (req, res) => {
 
 // search for a blog by its title (returns an array of blogs that contain req.params.title)
 router.get('/blogs/titles/:title/', (req, res) => {
-    blogHandler.getOneBlogByTitle(req.params.title, req.sessionUserId)
+    blogHandler.getBlogsByTitle(req.params.title, req.sessionUserId)
     .then(blogs => {
         res.status(200).json(blogs);
     })
