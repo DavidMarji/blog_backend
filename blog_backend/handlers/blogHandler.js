@@ -18,11 +18,14 @@ const getOneBlogByTitle = async function getOneBlogByTitle(title, userId) {
 
     const blogs = await Blog.getBlogsByTitle(title);
     // user tries to access an unpublished blog that they didn't create
+    const arr = [];
     for(const blog of blogs) {
-        if(!blog.published && blog.author_id !== userId) throw new Error(401);
+        if(blog.published || blog.author_id === userId) {
+            arr.push(blog);
+        };
     }
 
-    return blogs;
+    return arr;
     
     //throws 401 and 404
 }
