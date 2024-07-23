@@ -28,6 +28,4 @@ const validateUser = async function validateUser(email, username) {
 
 module.exports = {
     validateUser,
-    flagBadWord,
-    flagCelebrityName
 };
