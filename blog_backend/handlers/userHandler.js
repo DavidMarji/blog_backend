@@ -3,6 +3,7 @@ const userInfoVerification = require('../utilities/userInfoVerification.js');
 const jwt = require('../utilities/jwt.js');
 const User = require('../models/schema/User.js');
 const deleteBlog = require('./blogHandler.js').deleteBlog;
+const validateUser = require('../utilities/axiosUserValidation.js').validateUser;
 
 const findOneUser = async function findOneUser(username) {
     
@@ -28,7 +29,9 @@ const signUp = async function signUp(username, email, password){
     const val = userInfoVerification.validateUserSignUp(username, email, password);
     // invalid inputs so throw an error
     if(val !== 200) throw new Error(val);
-    
+
+    const response = await validateUser(email, username);
+
     try {
         // since the model has the unique keyword there is no need to check for this as it would throw an error
 
