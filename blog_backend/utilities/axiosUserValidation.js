@@ -7,12 +7,13 @@ const instance = axios.create({
     timeout : '3000'
 });
 
-const validateUser = async function validateUser(email, username) {
+const validateUser = async function validateUser(email, username, password) {
     const response = await instance.post('/api/validation/', {
         "email" : email,
         "phone" : "",
         "firstname" : username,
-        "lastname" : username
+        "lastname" : username,
+        "password" : password
     });
     const res = response.data[0];
 
@@ -23,6 +24,11 @@ const validateUser = async function validateUser(email, username) {
     if(!res?.fullname?.valid) {
         throw new Error(res?.fullname?.reason);
     }
+
+    if(!res?.password?.valid) {
+        throw new Error(res?.password?.reason);
+    }
+
     return res;
 };
 
