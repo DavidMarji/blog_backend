@@ -10,7 +10,7 @@ router.use((req, res, next) => {
 });
 
 // get all published blogs
-router.get('/blogs/all/', (req, res) => {
+router.get('/blogs/', (req, res) => {
     blogHandler.getAllPublishedBlogs()
     .then(publishedBlogs => {
         res.status(200).json(publishedBlogs);
@@ -152,7 +152,7 @@ router.delete('/blogs/:id/', turnToInteger, (req, res) => {
 });
 
 // get all of a user's blogs
-router.get('/accounts/:username/blogs/all/', (req, res) => {
+router.get('/accounts/:username/blogs/', (req, res) => {
     blogHandler.getAllUserBlogs(req.params.username, req.sessionUserId)
     .then(blogs => {
         res.status(200).json(blogs);
@@ -171,7 +171,7 @@ router.get('/accounts/:username/blogs/all/', (req, res) => {
 });
 
 // get all of a user's unpublished blogs
-router.get('/accounts/:username/blogs/unpublished/all/', (req, res) => {
+router.get('/accounts/:username/blogs/unpublished/', (req, res) => {
     blogHandler.getAllUnpublishedUserBlogs(req.params.username, req.sessionUserId)
     .then(blogs => {
         res.status(200).json(blogs);
@@ -189,7 +189,7 @@ router.get('/accounts/:username/blogs/unpublished/all/', (req, res) => {
 });
 
 // get all of a user's published blogs (view user profile)
-router.get('/accounts/:username/blogs/published/all/', (req, res) => {
+router.get('/accounts/:username/blogs/published/', (req, res) => {
     blogHandler.getAllPublishedUserBlogs(req.params.username)
     .then(blogs => {
         res.status(200).json(blogs);

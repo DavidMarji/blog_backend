@@ -26,19 +26,6 @@ const validateUser = async function validateUser(email, username) {
     return res;
 };
 
-const flagBadWord = async function flagBadWord(word) {
-    await instance.post('/api/badwords', {
-        "word" : word 
-    });
-};
-
-const flagCelebrityName = async function flagCelebrityName(celebrityFirstName, celebrityLastName) {
-    await instance.post('/api/celebritynames', {
-        "firstname" : celebrityFirstName,
-        "lastname" : celebrityLastName
-    });
-};
-
 module.exports = {
     validateUser,
     flagBadWord,
