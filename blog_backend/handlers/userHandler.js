@@ -24,17 +24,17 @@ const findUsers = async function findUsers(username) {
 }
 
 const signUp = async function signUp(username, email, password){
-    
     try {
 
         const response = await validateUser(email, username, password);
     }
     catch (error) {
-        console.log(error);
-        throw new Error(409);
+        throw error;
     }
-    
+
+    email = email.toLowerCase();
     if(password !== undefined && password !== null) password = hashing.hashText(password);
+    
     const val = userInfoVerification.validateUserSignUp(username, email, password);
     // invalid inputs so throw an error
     if(val !== 200) throw new Error(val);
