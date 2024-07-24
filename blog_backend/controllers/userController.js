@@ -20,7 +20,7 @@ router.post('/accounts/signup/', (req, res) => {
             res.sendStatus(code);
         }
         else {
-            console.log(error.message);
+            console.log(error);
             res.sendStatus(520);
         }
     });
@@ -38,7 +38,7 @@ router.post('/accounts/login/', (req, res) => {
             res.sendStatus(code);
         }
         else {
-            console.log(error.message);
+            console.log(error);
             res.sendStatus(520);
         }
     });

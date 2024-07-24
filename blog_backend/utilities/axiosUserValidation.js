@@ -24,7 +24,7 @@ const validateUser = async function validateUser(email, username, password) {
     if(!res?.fullname?.valid) {
         throw new Error(res?.fullname?.reason);
     }
-
+    
     if(!res?.password?.valid) {
         throw new Error(res?.password?.reason);
     }

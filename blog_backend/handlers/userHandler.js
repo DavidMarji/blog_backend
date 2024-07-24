@@ -25,12 +25,20 @@ const findUsers = async function findUsers(username) {
 
 const signUp = async function signUp(username, email, password){
     
+    try {
+
+        const response = await validateUser(email, username, password);
+    }
+    catch (error) {
+        console.log(error);
+        throw new Error(409);
+    }
+    
     if(password !== undefined && password !== null) password = hashing.hashText(password);
     const val = userInfoVerification.validateUserSignUp(username, email, password);
     // invalid inputs so throw an error
     if(val !== 200) throw new Error(val);
 
-    const response = await validateUser(email, username, password);
 
     try {
         // since the model has the unique keyword there is no need to check for this as it would throw an error
